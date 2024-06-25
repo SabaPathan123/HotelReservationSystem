@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.dto.Hotel;
+import com.project.exception.HotelNotFoundException;
 import com.project.repository.HotelRepository;
 
 @Service
@@ -25,6 +26,9 @@ public class HotelService {
 	
 	public Hotel findHotelById(int id) {
 		Optional<Hotel> hotel = hotelRepository.findById(id);
+		if(hotel.isEmpty()) {
+			throw new HotelNotFoundException("Requested hotel does not exist");
+		}
 		return hotel.get();
 	}
 	

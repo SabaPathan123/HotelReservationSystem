@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.dto.Room;
 import com.project.dto.Users;
+import com.project.exception.RoomNotFoundException;
 import com.project.repository.RoomRepository;
 
 @Service
@@ -28,6 +29,9 @@ public class RoomService {
 	
 	public Room findById(int id) {
 		Optional<Room> room = roomRepository.findById(id);
+		if(room.isEmpty()) {
+			throw new RoomNotFoundException("Requested room does not exist");
+		}
 		return room.get();
 	}
 	
@@ -43,7 +47,7 @@ public class RoomService {
 			room.setBookedBy(user);
 			roomRepository.save(room);
 		}
-		return null;
+		return room;
 	}
 	
 	public Room updateRoomAvailability(int id) {
@@ -53,7 +57,7 @@ public class RoomService {
 			room.setBookedBy(null);
 			roomRepository.save(room);
 		}
-		return null;
+		return room;
 		
 	}
 }
